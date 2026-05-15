@@ -1,9 +1,9 @@
 package main
 
 import (
+	handlers "JWT/Handlers"
 	middleware "JWT/Middleware"
 	DB "JWT/db"
-	handlers "JWT/handlers"
 	"log"
 	"net/http"
 )
@@ -14,6 +14,7 @@ func main() {
 	// Public APIs
 	http.HandleFunc("/register", handlers.Register)
 	http.HandleFunc("/login", handlers.Login)
+	http.HandleFunc("/delete", middleware.AuthMiddleware(handlers.DeleteUser))
 
 	// Protected API
 	http.HandleFunc("/dashboard", middleware.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {

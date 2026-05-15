@@ -31,7 +31,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("User registered successfully"))
 }
 
-// 🔹 LOGIN
 func Login(w http.ResponseWriter, r *http.Request) {
 	var creds models.User
 	json.NewDecoder(r.Body).Decode(&creds)
@@ -53,4 +52,20 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{
 		"token": token,
 	})
+}
+
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+
+	userID, err := utils.GetUserIDFromToken(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	err = Repository.DeleteUserByID(userID)
+	if err != nil {
+		http.Error(w, "Error deleting user", 500)
+		return
+	}
+	w.Write([]byte("User deleted successfully"))
+
 }

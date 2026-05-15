@@ -23,3 +23,10 @@ func GetUserByUsername(username string) (models.User, error) {
 
 	return user, err
 }
+func DeleteUserByID(id int) error {
+	_, err := db.DB.Exec(
+		"DELETE FROM users WHERE id=?",
+		id,
+	)
+	return err
+}
